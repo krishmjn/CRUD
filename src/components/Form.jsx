@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-
+import { Link } from "react-router-dom";
 const Form = () => {
   const [countries, setCountries] = useState([]);
   const [formData, setFormData] = useState(() => {
@@ -42,8 +41,15 @@ const Form = () => {
     e.preventDefault();
     const form = e.target;
     
-    const reader = new FileReader(); // FileReader to read file as data URL
     const imageFile = form.image.files[0];
+
+    // Check if an image file is selected or not
+    if (!imageFile) {
+      alert("Please upload an image.");
+      return;
+    }
+  
+    const reader = new FileReader();
   
     reader.onloadend = () => {
       const formDataObject = {
@@ -91,90 +97,147 @@ const Form = () => {
 
 
   return (
-    <div>
+    <div className="container w-100">
+    <h1 className="text-center mt-3">User Registration Form</h1>
       {loading ? (
         <p>Loading countries...</p>
       ) : (
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
         
-          <label htmlFor="Name">Name: </label>
-          <input
-            type="text"
-            name="name"
-            required
-            defaultValue={editing ? formData[editIndex].name : ""}
-          />
-          <br />
-          <label htmlFor="Email">Email: </label>
-          <input
-            type="email"
-            name="email"
-            required
-            defaultValue={editing ? formData[editIndex].email : ""}
-          />
-          <br />
-          <label htmlFor="Number">Phone Number: </label>
-          <input
-            type="text"
-            name="phoneNumber"
-            required
-            pattern=".{7,10}"
-            title="Phone number must be between 7 and 10 characters"
-            defaultValue={editing ? formData[editIndex].phone_number : ""}
-          />
-          <br />
-          <label htmlFor="dob">DOB: </label>
-          <input
-            type="date"
-            name="dob"
-            defaultValue={editing ? formData[editIndex].dob : ""}
-          />
-          <br />
-          <label htmlFor="Address">Address: </label>
-          <label htmlFor="city">City: </label>
-          <input
-            type="text"
-            name="city"
-            defaultValue={editing ? formData[editIndex].address.city : ""}
-          />
-          <br />
-          <label htmlFor="district">District: </label>
-          <input
-            type="text"
-            name="district"
-            defaultValue={editing ? formData[editIndex].address.district : ""}
-          />
-          <br />
-          <label htmlFor="Province">Province: </label>
-          <select name="province" id="province">
-            <option value="Koshi">1</option>
-            <option value="Madhesh">2</option>
-            <option value="Bagmati">3</option>
-            <option value="Gandaki">4</option>
-            <option value="Lumbini">5</option>
-            <option value="Karnali">6</option>
-            <option value="Sudur Paschim">7</option>
-          </select>
-          <label htmlFor="country">Country: </label>
-          <select name="country" id="country">
-            {countries.map((country, index) => (
-              <option key={index} value={country.name.common}>
-                {country.name.common}
-              </option>
-            ))}
-          </select>
-          <br />
-          <label htmlFor="image">Profile Picture</label>
-          <input type="file" name="image" accept=".png" />
-          <br />
-          <button type="submit">{editing ? "Update" : "POST"}</button>
-  </form>
-      )}
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="mt-5 mx-auto">
+  <div className="row">
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="Name" className="form-label">Name: </label>
+        <input
+          type="text"
+          name="name"
+          className="form-control"
+          required
+          pattern="[A-Za-z\s]{1,}"
+          title="Please enter a valid name (only alphabets and spaces are allowed)"
+          defaultValue={editing ? formData[editIndex].name : ""}
+        />
+      </div>
+    </div>
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="Email" className="form-label">Email: </label>
+        <input
+          type="email"
+          name="email"
+          className="form-control"
+          pattern="[a-zA-Z0-9]+@[a-z]+\.[a-zA-Z]{2,}"
+        title="Please enter a valid email address"
+          required
+          defaultValue={editing ? formData[editIndex].email : ""}
+        />
+      </div>
+    </div>
+  </div>
 
-      <table border={2}>
+  <div className="row">
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="Number" className="form-label">Phone Number: </label>
+        <input
+          type="text"
+          name="phoneNumber"
+          className="form-control"
+          required
+          pattern="[0-9]{7,10}"
+          title="Phone number must be between 7 and 10 characters"
+          defaultValue={editing ? formData[editIndex].phone_number : ""}
+        />
+      </div>
+    </div>
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="dob" className="form-label">DOB: </label>
+        <input
+          type="date"
+          name="dob"
+          className="form-control"
+          max={new Date().toISOString().split('T')[0]}
+          defaultValue={editing ? formData[editIndex].dob : ""}
+        />
+      </div>
+    </div>
+  </div>
+  <label htmlFor="Address" className="form-label h5">Address: </label><br />
+
+
+  <div className="row">
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="city" className="form-label">City: </label>
+        <input
+          type="text"
+          name="city"
+          className="form-control"
+          defaultValue={editing ? formData[editIndex].address.city : ""}
+        />
+      </div>
+    </div>
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="district" className="form-label">District: </label>
+        <input
+          type="text"
+          name="district"
+          className="form-control"
+          defaultValue={editing ? formData[editIndex].address.district : ""}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div className="row">
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="Province" className="form-label">Province: </label>
+        <select name="province" id="province" className="form-select">
+          <option value="Koshi">1</option>
+          <option value="Madhesh">2</option>
+          <option value="Bagmati">3</option>
+          <option value="Gandaki">4</option>
+          <option value="Lumbini">5</option>
+          <option value="Karnali">6</option>
+          <option value="Sudur Paschim">7</option>
+        </select>
+      </div>
+    </div>
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="country" className="form-label">Country: </label>
+        <select name="country" id="country" className="form-select">
+          {countries.map((country, index) => (
+            <option key={index} value={country.name.common}>
+              {country.name.common}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div className="row">
+    <div className="col-md-6">
+      <div className="mb-3">
+        <label htmlFor="image" className="form-label">Profile Picture</label>
+        <input type="file" name="image" accept=".png" className="form-control" />
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" className="btn btn-primary">{editing ? "Update" : "POST"}</button>
+</form>
+
+      )}
+      
+
+      <table className="table table-bordered mt-4">
         <thead>
           <tr>
-        
             <th>Name</th>
             <th>Email</th>
             <th>Phone Number</th>
@@ -187,50 +250,46 @@ const Form = () => {
             <th>Actions</th>
           </tr>
         </thead>
-          
-        
         <tbody>
           {dataToShow.map((data, index) => (
             <tr key={index}>
-         
-                <td>{data.name}</td>
-                <td>{data.email}</td>
-                <td>{data.phone_number}</td>
-                <td>{data.dob}</td>
-                <td>{data.address.city}</td>
-                <td>{data.address.district}</td>
-                <td>{data.address.province}</td>
-                <td>{data.address.country}</td>
-                <td>
+              <td>{data.name}</td>
+              <td>{data.email}</td>
+              <td>{data.phone_number}</td>
+              <td>{data.dob}</td>
+              <td>{data.address.city}</td>
+              <td>{data.address.district}</td>
+              <td>{data.address.province}</td>
+              <td>{data.address.country}</td>
+              <td>
                 <img
                   src={data.image}
                   alt="Profile"
                   style={{ maxWidth: "100px", maxHeight: "100px" }}
                 />
               </td>
-                <td>
-                  <button onClick={() => handleUpdate(index)}>Edit</button>
-                  <button onClick={() => handleDelete(index)}>Delete</button>
-                </td>
-              </tr>
-            
+              <td className="d-flex justify-content-between">
+                <button onClick={() => handleUpdate(index)} className="btn btn-sm btn-primary mx-1 ">Edit</button>
+                <button onClick={() => handleDelete(index)} className="btn btn-sm btn-danger mx-1">Delete</button>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
 
       <div className="pagination">
-        <ul>
- 
+        <ul className="list-unstyled d-flex">
           {numbers.map((n, i) => (
             <li key={i} className={`page-item ${currentPage === n ? "active" : ""}`}>
-              <a href="#" onClick={() => changePage(n)}>
+              <a href="#" onClick={() => changePage(n)} className="page-link">
                 {n}
               </a>
             </li>
           ))}
-   
         </ul>
       </div>
+      <button className="btn btn-primary"><Link to={"profiles"} className="link-light">Profiles</Link></button>
+
     </div>
   );
 };
