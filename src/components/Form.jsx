@@ -265,7 +265,7 @@ const Form = () => {
                 <img
                   src={data.image}
                   alt="Profile"
-                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                  style={{ maxWidth: "60px", maxHeight: "60px" }}
                 />
               </td>
               <td className="d-flex justify-content-between">
